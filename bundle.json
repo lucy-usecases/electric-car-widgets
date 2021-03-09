@@ -1,0 +1,16 @@
+{
+    "id":"75b9de54-7319-43e8-b007-0fd0c221e81d",
+    "author":"",
+    "widgets":[
+        {
+            "id":"electric_car_widgets",
+            "title":"electric_car_widgets",
+            "description":"A sample widget"
+        }
+    ],
+    "sidebarLinks":[
+        {
+            "id":"electric_car_widgetsLink"
+        }
+    ]
+}

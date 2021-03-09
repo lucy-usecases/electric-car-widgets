@@ -1,0 +1,235 @@
+.car_widget{   
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    min-height: 60px;
+    flex-grow: 0;
+    background-color: #000000;
+    color: #ffffff78;
+
+
+
+    .car_widget-battery-bg{ 
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(https://static.iviva.com/images/Car_widget/bg-1.png);
+        display: inline-block;
+        width: 110%;
+        height: 9em;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        filter: blur(2px);
+        transform: translateX(-50%);
+    }
+
+    .uxp-widget-title-bar { 
+        padding: 2px;
+        min-height: 20px;
+        background-color: #000000;
+        width: 100%;
+    }
+
+    .car_widget-header{
+        // display: inline-flex;
+        //  width: 100%;
+        //  padding: 0px 10px;
+        //  height: 30vh;
+
+        display: inline-flex;
+        width: 100%;
+        padding: 0px 2em;
+        position: absolute;
+        top: 5%;
+
+    }
+
+
+    .uxp-form-group.showcase-input {
+        width: 100% !important;
+        padding: 0; 
+                .uxp-form-select{ 
+                    position: relative;
+                    .uxp-select-placeholder{  
+                        background-color: #70707061; 
+                        color: #ffffff69; 
+                        padding: 10px 35px 10px 20px;
+                    }
+                } 
+    } 
+
+    label {
+        color: #ffffff78;
+    }
+
+    .car_widget_lft {
+        display: inline-block;
+        width: 50%;
+
+        .uxp-form-select {
+            min-width: 100%;
+        }
+    }
+
+    .car_widget_rht { 
+        //display: inline-block;
+        width: 50%;
+        float: right;
+
+        .uxp-form-select {
+            min-width: 100%;
+        }
+
+        .block_building{
+            float: right;
+            margin-top: 0.7em;
+            font-size: 0.8em;
+        }
+
+        .uti-sel-boxes{
+            float: right;
+            margin-bottom: 1em;
+        }
+    }
+
+
+    .car_widget-body{
+        // display: inline-block;
+        // width:100%; 
+        // align-items: center;
+        // min-height: 45vh; 
+        // max-height: 60vh; 
+
+        display: inline-block;
+        width: 100%;
+        align-items: center;
+        position: absolute;
+        top: 50%;
+        left: 1em;
+        transform: translateY(-50%);
+
+        .car-battery{
+            display: inline-block;
+            width: 90%;
+            padding-left: 5%;
+            
+            .widget-pict{
+                display: inline-block; 
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: contain; 
+                position: relative;
+                opacity: 0.9;
+                &.car{
+                    width: 5em;
+                    height: 4em;
+                    background-image: url("https://static.iviva.com/images/Car_widget/Car.svg");
+
+                    .car-battery-pict{
+                        display: inline-block;
+                        background-position: top left;
+                        background-repeat: no-repeat;
+                        background-size: 100% auto;
+                        background-image: url("https://static.iviva.com/images/Car_widget/Battery.svg");
+                        width: 4em;
+                        height: 2em;
+                        position: absolute;
+                        left: 5em;
+                        top: -2em;
+                    }
+                }
+            } 
+            h3.battery-value{
+                display: inline-block;
+                font-size: 1.8em;
+                margin: 0.8em 0 0 0;
+                padding: 0;
+                width: 100%;
+            }
+            p.battery-status{
+                display: inline-block;
+                font-size: 1.1em;
+                padding: 0;
+                margin: 1em 0 0 0;
+                width: 100%;
+            }
+        }
+    }
+
+    &.car_widget-details{ 
+        display: inline-block;
+
+        .car_details{
+            display: inline-block;
+            width: 100%;
+            height: 80%;
+
+            // display: inline-block;
+            // width: 90%;
+            // position: absolute;
+            // left: 5%;
+            // top: 50%;
+            // transform: translateY(-50%);
+
+            .data-grid { 
+                background-color: transparent;
+
+                .data-grid-column { 
+                    border: 1px solid #77777763;
+                    height: 50%;
+                }
+
+                .item-card{
+                    background-color: transparent; 
+                    display: inline-block;
+                   
+                   .item-card-image-container {
+                        position: inherit;
+                        transform: none;
+                        left: 0;
+                        top: 0;
+
+                        .profile-image-container{
+                            background-color: transparent!important;
+                            width: 25px;
+                            height: 25px;
+                            opacity: 0.8; 
+                        }
+                    }
+                    .content{
+                        margin-left: 0;
+
+                        .title {
+                                
+
+                                h3{
+                                    margin: 0;
+                                    padding: 0;
+                                    font-weight: 500;
+                                    font-size: 1.65em;
+
+                                    &.green{
+                                        color: #4fc8ac82;
+                                    }
+                                    &.orange{
+                                        color: #815821cf;  
+                                    }
+                                    span.white{
+                                        color:#ffffffb8;
+                                    }
+                                }
+                        } 
+                        .sub-title {
+                            font-size: 9px;
+                            padding: 3px 0;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
