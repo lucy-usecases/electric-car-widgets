@@ -9,7 +9,7 @@ interface IWidgetProps {
 
 const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props) => {
 
-    let [selected, setSelected] = React.useState<string | null>("op-1");
+    let [selected, setSelected] = React.useState<string | null>('3');
     // let [inputValue, setInputValue] = React.useState<string | null>("sample text");
 
     // let [defCheckState, setDefCheckState] = React.useState<boolean>(false);
@@ -34,11 +34,13 @@ const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props
                         <div className="uti-sel-box">
                             <FormField inline className="showcase-input">
                                 <Select
-                                    selected={selected}
+                                    selected={selected+''}
                                     options={[
-                                        { label: "24 hours", value: "op-1" },
-                                        { label: "Central Square 1", value: "op-2" },
-                                        { label: "Central Square 2", value: "op-3" },
+                                        { label: "3 Hours", value: ''+(3) },
+                                        { label: "24 hours", value: ''+(24) },
+                                        { label: "One Week", value: ''+(24*7) },
+                                        { label: "30 Days", value: ''+(24*30) },
+                                  
                                     ]}
                                     onChange={(value) => { setSelected(value) }}
                                     placeholder=" -- select --"
@@ -79,20 +81,46 @@ const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props
     )
 }; 
 
+interface IChargeSession {
+    station: string;
+    charges: number;
+    power: number;
+    duration:number;
+}
+const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
+    let [selected, setSelected] = React.useState<string | null>('3');
+    let [sessions,setSessions] = React.useState<IChargeSession[]>([]);
 
-const Electric_car_widgetsWidget_Details: React.FunctionComponent<IWidgetProps> = (props) => {
-    let [selected, setSelected] = React.useState<string | null>("op-1");
+    let start = new Date();
+    let end = new Date();
+    start.setHours(start.getHours() - Number(selected));
 
+    React.useEffect(()=>{
+        props.uxpContext.executeAction('ElectricVehicleCharging','StationUsage',{start,end},{json:true}).then(data=>{
+            setSessions(data);
+        });
+    },[selected]);
+
+    let {power,charges,duration} = sessions.reduce((old,x) => (
+        {power:old.power+x.power,charges:old.charges+x.charges,duration:old.duration+x.duration}
+    ),{power:0,charges:0,duration:0});
+    let energyPerCharge = charges==0?0:(power/charges);
+    let chargingStationsUsed = sessions.filter(x => x.duration>0).length;
+    let totalChargingStations = sessions.length;
+   
+    let totalDuration = (Number(end) - Number(start))/1000;
+    let percentageUsed = (totalDuration==0 || totalChargingStations==0) ? 0: duration/(totalChargingStations*totalDuration);
+    let percentageUsePerDay = 100*percentageUsed;
     const GridData = [
         {
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
-            title: <h3 className="orange">56</h3>,
+            title: <h3 className="orange">{`${percentageUsePerDay.toFixed(2)}`}</h3>,
             subTitle: "% of charger usage per day"
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
             // name: "Udhaya Kumar",
-            title: <h3 className="green">02 Kw/H</h3>,
+            title: <h3 className="green">{`${energyPerCharge.toFixed(2)} Kw/H`}</h3>,
             subTitle: " Average energy per charge"
         },
         {
@@ -102,7 +130,7 @@ const Electric_car_widgetsWidget_Details: React.FunctionComponent<IWidgetProps> 
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
-            title: <h3 className="orange">11 <span className="white">/16</span></h3>,
+            title: <h3 className="orange">{chargingStationsUsed} <span className="white">{`/${totalChargingStations}`}</span></h3>,
             subTitle: "CHARGING STATIONS USED"
         }  
     ]  
@@ -126,11 +154,13 @@ const Electric_car_widgetsWidget_Details: React.FunctionComponent<IWidgetProps> 
                         <div className="uti-sel-box">
                             <FormField inline className="showcase-input">
                                 <Select
-                                    selected={selected}
+                                    selected={selected+''}
                                     options={[
-                                        { label: "24 hours", value: "op-1" },
-                                        { label: "Central Square 1", value: "op-2" },
-                                        { label: "Central Square 2", value: "op-3" },
+                                        { label: "3 Hours", value: ''+(3) },
+                                        { label: "24 hours", value: ''+(24) },
+                                        { label: "One Week", value: ''+(24*7) },
+                                        { label: "30 Days", value: ''+(24*30) },
+                                  
                                     ]}
                                     onChange={(value) => { setSelected(value) }}
                                     placeholder=" -- select --"
@@ -172,9 +202,9 @@ registerWidget({
 
 
 registerWidget({
-    id: "car_widgets_Details",
-    name: "Electric_car_widgets_Details",
-    widget: Electric_car_widgetsWidget_Details,
+    id: "ev-car-widget-details",
+    name: "EV Charging Summary",
+    widget: EVDetails,
     configs: {
         layout: {
             // w: 12,
