@@ -6,7 +6,7 @@
     min-height: 60px;
     flex-grow: 0;
     background-color: #000000;
-    color: #ffffff78;
+    color: #ffffffFF;
 
 
 
@@ -121,7 +121,7 @@
                 background-repeat: no-repeat;
                 background-size: contain; 
                 position: relative;
-                opacity: 0.9;
+                // opacity: 0.9;
                 &.car{
                     width: 5em;
                     height: 4em;
@@ -195,7 +195,7 @@
                             background-color: transparent!important;
                             width: 25px;
                             height: 25px;
-                            opacity: 0.8; 
+                            // opacity: 0.8; 
                         }
                     }
                     .content{
@@ -211,13 +211,13 @@
                                     font-size: 1.65em;
 
                                     &.green{
-                                        color: #4fc8ac82;
+                                        color: #4fc8acFF;
                                     }
                                     &.orange{
-                                        color: #815821cf;  
+                                        color: #815821FF;  
                                     }
                                     span.white{
-                                        color:#ffffffb8;
+                                        color:#ffffffFF;
                                     }
                                 }
                         } 

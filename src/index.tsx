@@ -105,17 +105,25 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         {power:old.power+x.power,charges:old.charges+x.charges,duration:old.duration+x.duration}
     ),{power:0,charges:0,duration:0});
     let energyPerCharge = charges==0?0:(power/charges);
+    let totalEnergy = power;
     let chargingStationsUsed = sessions.filter(x => x.duration>0).length;
     let totalChargingStations = sessions.length;
    
     let totalDuration = (Number(end) - Number(start))/1000;
     let percentageUsed = (totalDuration==0 || totalChargingStations==0) ? 0: duration/(totalChargingStations*totalDuration);
     let percentageUsePerDay = 100*percentageUsed;
+
+    let emissionReduction = 1616*power;
+    let units = 'g';
+    if (emissionReduction > 1000) {
+        emissionReduction = emissionReduction/1000.0;
+        units = 'kg';
+    }
     const GridData = [
         {
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
-            title: <h3 className="orange">{`${percentageUsePerDay.toFixed(2)}`}</h3>,
-            subTitle: "% of charger usage per day"
+            title: <h3 className="orange">{`${totalEnergy.toFixed(0)} Kw`}</h3>,
+            subTitle: "Total Energy"
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
@@ -125,7 +133,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
-            title: <h3 className="green">50%</h3>,
+            title: <h3 className="green">{`${emissionReduction.toFixed(1)}${units}`}</h3>,
             subTitle: "REDUCED EMISSIONS"
         },
         {
@@ -186,19 +194,16 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
 /**
  * Register as a Widget
  */
-registerWidget({
-    id: "electric_car_widgets",
-    name: "Electric_car_widgets",
-    widget: Electric_car_widgetsWidget,
-    configs: {
-        layout: {
-            // w: 12,
-            // h: 12,
-            // minH: 12,
-            // minW: 12
-        }
-    }
-});
+// registerWidget({
+//     id: "electric_car_widgets",
+//     name: "Electric_car_widgets",
+//     widget: Electric_car_widgetsWidget,
+//     configs: {
+//         layout: {
+        
+//         }
+//     }
+// });
 
 
 registerWidget({
@@ -207,33 +212,7 @@ registerWidget({
     widget: EVDetails,
     configs: {
         layout: {
-            // w: 12,
-            // h: 12,
-            // minH: 12,
-            // minW: 12
+       
         }
     }
 });
-
-/**
- * Register as a Sidebar Link
- */
-/*
-registerLink({
-    id: "electric_car_widgets",
-    label: "Electric_car_widgets",
-    // click: () => alert("Hello"),
-    component: Electric_car_widgetsWidget
-});
-*/
-
-/**
- * Register as a UI
- */
-
- /*
-registerUI({
-    id:"electric_car_widgets",
-    component: Electric_car_widgetsWidget
-});
-*/
