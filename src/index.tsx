@@ -128,7 +128,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         {
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
             // name: "Udhaya Kumar",
-            title: <h3 className="green">{`${energyPerCharge.toFixed(2)} Kw/H`}</h3>,
+            title: <h3 className="green">{`${energyPerCharge.toFixed(2)} KwH`}</h3>,
             subTitle: " Average energy per charge"
         },
         {
