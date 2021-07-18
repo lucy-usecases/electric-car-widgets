@@ -80,7 +80,16 @@ const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props
         </WidgetWrapper>
     )
 }; 
-
+function fixed(n:number) {
+    if (n==0) return '0';
+    if (n > 999) {
+        return n.toFixed(0);
+    }
+    if (n > 99) {
+        return n.toFixed(1);
+    }
+    return n.toFixed(2);
+}
 interface IChargeSession {
     station: string;
     charges: number;
@@ -122,18 +131,18 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
     const GridData = [
         {
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
-            title: <h3 className="orange">{`${totalEnergy.toFixed(0)} Kw`}</h3>,
+            title: <h3 className="orange">{`${fixed(totalEnergy)} Kw`}</h3>,
             subTitle: "Total Energy"
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
             // name: "Udhaya Kumar",
-            title: <h3 className="green">{`${energyPerCharge.toFixed(2)} KwH`}</h3>,
+            title: <h3 className="green">{`${fixed(energyPerCharge)} KwH`}</h3>,
             subTitle: " Average energy per charge"
         },
         {
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
-            title: <h3 className="green">{`${emissionReduction.toFixed(1)}${units}`}</h3>,
+            title: <h3 className="green">{`${fixed(emissionReduction)}${units}`}</h3>,
             subTitle: "REDUCED EMISSIONS"
         },
         {
@@ -168,6 +177,8 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
                                         { label: "24 hours", value: ''+(24) },
                                         { label: "One Week", value: ''+(24*7) },
                                         { label: "30 Days", value: ''+(24*30) },
+                                        { label: "60 Days", value: ''+(24*60) },
+                                        { label: "90 Days", value: ''+(24*90) },
                                   
                                     ]}
                                     onChange={(value) => { setSelected(value) }}
