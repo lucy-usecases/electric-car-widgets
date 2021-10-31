@@ -312,7 +312,7 @@ module.exports = function () {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".car_widget {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 15px;\n  min-height: 60px;\n  flex-grow: 0;\n  background-color: #000000;\n  color: #ffffffFF; }\n  .car_widget .car_widget-battery-bg {\n    background-position: center center;\n    background-repeat: no-repeat;\n    background-size: contain;\n    background-image: url(https://static.iviva.com/images/Car_widget/bg-1.png);\n    display: inline-block;\n    width: 110%;\n    height: 9em;\n    position: absolute;\n    bottom: 0;\n    left: 50%;\n    filter: blur(2px);\n    transform: translateX(-50%); }\n  .car_widget .uxp-widget-title-bar {\n    padding: 2px;\n    min-height: 20px;\n    background-color: #000000;\n    width: 100%; }\n  .car_widget .car_widget-header {\n    display: inline-flex;\n    width: 100%;\n    padding: 0px 2em;\n    position: absolute;\n    top: 5%; }\n  .car_widget .uxp-form-group.showcase-input {\n    width: 100% !important;\n    padding: 0; }\n    .car_widget .uxp-form-group.showcase-input .uxp-form-select {\n      position: relative; }\n      .car_widget .uxp-form-group.showcase-input .uxp-form-select .uxp-select-placeholder {\n        background-color: #70707061;\n        color: #ffffff69;\n        padding: 10px 35px 10px 20px; }\n  .car_widget label {\n    color: #ffffff78; }\n  .car_widget .car_widget_lft {\n    display: inline-block;\n    width: 50%; }\n    .car_widget .car_widget_lft .uxp-form-select {\n      min-width: 100%; }\n  .car_widget .car_widget_rht {\n    width: 50%;\n    float: right; }\n    .car_widget .car_widget_rht .uxp-form-select {\n      min-width: 100%; }\n    .car_widget .car_widget_rht .block_building {\n      float: right;\n      margin-top: 0.7em;\n      font-size: 0.8em; }\n    .car_widget .car_widget_rht .uti-sel-boxes {\n      float: right;\n      margin-bottom: 1em; }\n  .car_widget .car_widget-body {\n    display: inline-block;\n    width: 100%;\n    align-items: center;\n    position: absolute;\n    top: 50%;\n    left: 1em;\n    transform: translateY(-50%); }\n    .car_widget .car_widget-body .car-battery {\n      display: inline-block;\n      width: 90%;\n      padding-left: 5%; }\n      .car_widget .car_widget-body .car-battery .widget-pict {\n        display: inline-block;\n        background-position: center center;\n        background-repeat: no-repeat;\n        background-size: contain;\n        position: relative; }\n        .car_widget .car_widget-body .car-battery .widget-pict.car {\n          width: 5em;\n          height: 4em;\n          background-image: url(\"https://static.iviva.com/images/Car_widget/Car.svg\"); }\n          .car_widget .car_widget-body .car-battery .widget-pict.car .car-battery-pict {\n            display: inline-block;\n            background-position: top left;\n            background-repeat: no-repeat;\n            background-size: 100% auto;\n            background-image: url(\"https://static.iviva.com/images/Car_widget/Battery.svg\");\n            width: 4em;\n            height: 2em;\n            position: absolute;\n            left: 5em;\n            top: -2em; }\n      .car_widget .car_widget-body .car-battery h3.battery-value {\n        display: inline-block;\n        font-size: 1.8em;\n        margin: 0.8em 0 0 0;\n        padding: 0;\n        width: 100%; }\n      .car_widget .car_widget-body .car-battery p.battery-status {\n        display: inline-block;\n        font-size: 1.1em;\n        padding: 0;\n        margin: 1em 0 0 0;\n        width: 100%; }\n  .car_widget.car_widget-details {\n    display: inline-block; }\n    .car_widget.car_widget-details .car_details {\n      display: inline-block;\n      width: 100%;\n      height: 80%; }\n      .car_widget.car_widget-details .car_details .data-grid {\n        background-color: transparent; }\n        .car_widget.car_widget-details .car_details .data-grid .data-grid-column {\n          border: 1px solid #77777763;\n          height: 50%; }\n        .car_widget.car_widget-details .car_details .data-grid .item-card {\n          background-color: transparent;\n          display: inline-block; }\n          .car_widget.car_widget-details .car_details .data-grid .item-card .item-card-image-container {\n            position: inherit;\n            transform: none;\n            left: 0;\n            top: 0; }\n            .car_widget.car_widget-details .car_details .data-grid .item-card .item-card-image-container .profile-image-container {\n              background-color: transparent !important;\n              width: 25px;\n              height: 25px; }\n          .car_widget.car_widget-details .car_details .data-grid .item-card .content {\n            margin-left: 0; }\n            .car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3 {\n              margin: 0;\n              padding: 0;\n              font-weight: 500;\n              font-size: 1.65em; }\n              .car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3.green {\n                color: #4fc8acFF; }\n              .car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3.orange {\n                color: #815821FF; }\n              .car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3 span.white {\n                color: #ffffffFF; }\n            .car_widget.car_widget-details .car_details .data-grid .item-card .content .sub-title {\n              font-size: 9px;\n              padding: 3px 0;\n              text-transform: uppercase; }\n", ""]);
+exports.push([module.i, ".car_widget {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 15px;\n  min-height: 60px;\n  flex-grow: 0;\n  background-color: #000000;\n  color: #ffffffFF;\n}\n.car_widget .car_widget-battery-bg {\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: contain;\n  background-image: url(https://static.iviva.com/images/Car_widget/bg-1.png);\n  display: inline-block;\n  width: 110%;\n  height: 9em;\n  position: absolute;\n  bottom: 0;\n  left: 50%;\n  filter: blur(2px);\n  transform: translateX(-50%);\n}\n.car_widget .uxp-widget-title-bar {\n  padding: 2px;\n  min-height: 20px;\n  background-color: #000000;\n  width: 100%;\n}\n.car_widget .car_widget-header {\n  display: inline-flex;\n  width: 100%;\n  padding: 0px 2em;\n  position: absolute;\n  top: 5%;\n}\n.car_widget .uxp-form-group.showcase-input {\n  width: 100% !important;\n  padding: 0;\n}\n.car_widget .uxp-form-group.showcase-input .uxp-form-select {\n  position: relative;\n}\n.car_widget .uxp-form-group.showcase-input .uxp-form-select .uxp-select-placeholder {\n  background-color: #70707061;\n  color: #ffffff69;\n  padding: 10px 35px 10px 20px;\n}\n.car_widget label {\n  color: #ffffff78;\n}\n.car_widget .car_widget_lft {\n  display: inline-block;\n  width: 50%;\n}\n.car_widget .car_widget_lft .uxp-form-select {\n  min-width: 100%;\n}\n.car_widget .car_widget_rht {\n  width: 50%;\n  float: right;\n}\n.car_widget .car_widget_rht .uxp-form-select {\n  min-width: 100%;\n}\n.car_widget .car_widget_rht .block_building {\n  float: right;\n  margin-top: 0.7em;\n  font-size: 0.8em;\n}\n.car_widget .car_widget_rht .uti-sel-boxes {\n  float: right;\n  margin-bottom: 1em;\n}\n.car_widget .car_widget-body {\n  display: inline-block;\n  width: 100%;\n  align-items: center;\n  position: absolute;\n  top: 50%;\n  left: 1em;\n  transform: translateY(-50%);\n}\n.car_widget .car_widget-body .car-battery {\n  display: inline-block;\n  width: 90%;\n  padding-left: 5%;\n}\n.car_widget .car_widget-body .car-battery .widget-pict {\n  display: inline-block;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: contain;\n  position: relative;\n}\n.car_widget .car_widget-body .car-battery .widget-pict.car {\n  width: 5em;\n  height: 4em;\n  background-image: url(\"https://static.iviva.com/images/Car_widget/Car.svg\");\n}\n.car_widget .car_widget-body .car-battery .widget-pict.car .car-battery-pict {\n  display: inline-block;\n  background-position: top left;\n  background-repeat: no-repeat;\n  background-size: 100% auto;\n  background-image: url(\"https://static.iviva.com/images/Car_widget/Battery.svg\");\n  width: 4em;\n  height: 2em;\n  position: absolute;\n  left: 5em;\n  top: -2em;\n}\n.car_widget .car_widget-body .car-battery h3.battery-value {\n  display: inline-block;\n  font-size: 1.8em;\n  margin: 0.8em 0 0 0;\n  padding: 0;\n  width: 100%;\n}\n.car_widget .car_widget-body .car-battery p.battery-status {\n  display: inline-block;\n  font-size: 1.1em;\n  padding: 0;\n  margin: 1em 0 0 0;\n  width: 100%;\n}\n.car_widget.car_widget-details {\n  display: inline-block;\n}\n.car_widget.car_widget-details .car_details {\n  display: inline-block;\n  width: 100%;\n  height: 80%;\n}\n.car_widget.car_widget-details .car_details .data-grid {\n  background-color: transparent;\n}\n.car_widget.car_widget-details .car_details .data-grid .data-grid-column {\n  border: 1px solid #77777763;\n  height: 50%;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card {\n  background-color: transparent;\n  display: inline-block;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .item-card-image-container {\n  position: inherit;\n  transform: none;\n  left: 0;\n  top: 0;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .item-card-image-container .profile-image-container {\n  background-color: transparent !important;\n  width: 25px;\n  height: 25px;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content {\n  margin-left: 0;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3 {\n  margin: 0;\n  padding: 0;\n  font-weight: 500;\n  font-size: 1.65em;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3.green {\n  color: #4fc8acFF;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3.orange {\n  color: #815821FF;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content .title h3 span.white {\n  color: #ffffffFF;\n}\n.car_widget.car_widget-details .car_details .data-grid .item-card .content .sub-title {\n  font-size: 9px;\n  padding: 3px 0;\n  text-transform: uppercase;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -2476,7 +2476,7 @@ exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "./node
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var require;var require;/* sockjs-client v1.5.0 | http://sockjs.org | MIT license */
+/* WEBPACK VAR INJECTION */(function(global) {var require;var require;/* sockjs-client v1.5.2 | http://sockjs.org | MIT license */
 (function(f){if(true){module.exports=f()}else { var g; }})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return require(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -6214,7 +6214,7 @@ module.exports = {
 }).call(this,{ env: {} })
 
 },{"debug":55,"url-parse":61}],53:[function(require,module,exports){
-module.exports = '1.5.0';
+module.exports = '1.5.2';
 
 },{}],54:[function(require,module,exports){
 /**
@@ -7955,7 +7955,8 @@ module.exports = function required(port, protocol) {
 var required = require('requires-port')
   , qs = require('querystringify')
   , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
-  , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
+  , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\\/]+)?([\S\s]*)/i
+  , windowsDriveLetter = /^[a-zA-Z]:/
   , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
   , left = new RegExp('^'+ whitespace +'+');
 
@@ -7984,8 +7985,8 @@ function trimLeft(str) {
 var rules = [
   ['#', 'hash'],                        // Extract from the back.
   ['?', 'query'],                       // Extract from the back.
-  function sanitize(address) {          // Sanitize what is left of the address
-    return address.replace('\\', '/');
+  function sanitize(address, url) {     // Sanitize what is left of the address
+    return isSpecial(url.protocol) ? address.replace(/\\/g, '/') : address;
   },
   ['/', 'pathname'],                    // Extract from the back.
   ['@', 'auth', 1],                     // Extract from the front.
@@ -8051,6 +8052,24 @@ function lolcation(loc) {
 }
 
 /**
+ * Check whether a protocol scheme is special.
+ *
+ * @param {String} The protocol scheme of the URL
+ * @return {Boolean} `true` if the protocol scheme is special, else `false`
+ * @private
+ */
+function isSpecial(scheme) {
+  return (
+    scheme === 'file:' ||
+    scheme === 'ftp:' ||
+    scheme === 'http:' ||
+    scheme === 'https:' ||
+    scheme === 'ws:' ||
+    scheme === 'wss:'
+  );
+}
+
+/**
  * @typedef ProtocolExtract
  * @type Object
  * @property {String} protocol Protocol matched in the URL, in lowercase.
@@ -8062,17 +8081,57 @@ function lolcation(loc) {
  * Extract protocol information from a URL with/without double slash ("//").
  *
  * @param {String} address URL we want to extract from.
+ * @param {Object} location
  * @return {ProtocolExtract} Extracted information.
  * @private
  */
-function extractProtocol(address) {
+function extractProtocol(address, location) {
   address = trimLeft(address);
+  location = location || {};
+
   var match = protocolre.exec(address);
+  var protocol = match[1] ? match[1].toLowerCase() : '';
+  var forwardSlashes = !!match[2];
+  var otherSlashes = !!match[3];
+  var slashesCount = 0;
+  var rest;
+
+  if (forwardSlashes) {
+    if (otherSlashes) {
+      rest = match[2] + match[3] + match[4];
+      slashesCount = match[2].length + match[3].length;
+    } else {
+      rest = match[2] + match[4];
+      slashesCount = match[2].length;
+    }
+  } else {
+    if (otherSlashes) {
+      rest = match[3] + match[4];
+      slashesCount = match[3].length;
+    } else {
+      rest = match[4]
+    }
+  }
+
+  if (protocol === 'file:') {
+    if (slashesCount >= 2) {
+      rest = rest.slice(2);
+    }
+  } else if (isSpecial(protocol)) {
+    rest = match[4];
+  } else if (protocol) {
+    if (forwardSlashes) {
+      rest = rest.slice(2);
+    }
+  } else if (slashesCount >= 2 && isSpecial(location.protocol)) {
+    rest = match[4];
+  }
 
   return {
-    protocol: match[1] ? match[1].toLowerCase() : '',
-    slashes: !!match[2],
-    rest: match[3]
+    protocol: protocol,
+    slashes: forwardSlashes || isSpecial(protocol),
+    slashesCount: slashesCount,
+    rest: rest
   };
 }
 
@@ -8162,7 +8221,7 @@ function Url(address, location, parser) {
   //
   // Extract protocol information before running the instructions.
   //
-  extracted = extractProtocol(address || '');
+  extracted = extractProtocol(address || '', location);
   relative = !extracted.protocol && !extracted.slashes;
   url.slashes = extracted.slashes || relative && location.slashes;
   url.protocol = extracted.protocol || location.protocol || '';
@@ -8172,13 +8231,22 @@ function Url(address, location, parser) {
   // When the authority component is absent the URL starts with a path
   // component.
   //
-  if (!extracted.slashes) instructions[3] = [/(.*)/, 'pathname'];
+  if (
+    extracted.protocol === 'file:' && (
+      extracted.slashesCount !== 2 || windowsDriveLetter.test(address)) ||
+    (!extracted.slashes &&
+      (extracted.protocol ||
+        extracted.slashesCount < 2 ||
+        !isSpecial(url.protocol)))
+  ) {
+    instructions[3] = [/(.*)/, 'pathname'];
+  }
 
   for (; i < instructions.length; i++) {
     instruction = instructions[i];
 
     if (typeof instruction === 'function') {
-      address = instruction(address);
+      address = instruction(address, url);
       continue;
     }
 
@@ -8233,6 +8301,14 @@ function Url(address, location, parser) {
   }
 
   //
+  // Default to a / for pathname if none exists. This normalizes the URL
+  // to always have a /
+  //
+  if (url.pathname.charAt(0) !== '/' && isSpecial(url.protocol)) {
+    url.pathname = '/' + url.pathname;
+  }
+
+  //
   // We should not add port numbers if they are already the default port number
   // for a given protocol. As the host also contains the port number we're going
   // override it with the hostname which contains no port number.
@@ -8252,7 +8328,7 @@ function Url(address, location, parser) {
     url.password = instruction[1] || '';
   }
 
-  url.origin = url.protocol && url.host && url.protocol !== 'file:'
+  url.origin = url.protocol !== 'file:' && isSpecial(url.protocol) && url.host
     ? url.protocol +'//'+ url.host
     : 'null';
 
@@ -8345,7 +8421,7 @@ function set(part, value, fn) {
     if (ins[4]) url[ins[1]] = url[ins[1]].toLowerCase();
   }
 
-  url.origin = url.protocol && url.host && url.protocol !== 'file:'
+  url.origin = url.protocol !== 'file:' && isSpecial(url.protocol) && url.host
     ? url.protocol +'//'+ url.host
     : 'null';
 
@@ -8370,7 +8446,7 @@ function toString(stringify) {
 
   if (protocol && protocol.charAt(protocol.length - 1) !== ':') protocol += ':';
 
-  var result = protocol + (url.slashes ? '//' : '');
+  var result = protocol + (url.slashes || isSpecial(url.protocol) ? '//' : '');
 
   if (url.username) {
     result += url.username;

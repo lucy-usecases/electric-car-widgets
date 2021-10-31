@@ -1,0 +1,9 @@
+{
+    "title": "Electric Vehicle Charging",
+    "tags": [
+        "ev-vehicles"
+    ],
+    "version": "1.1.0",
+    "public": true,
+    "connectorsRequired": []
+}

@@ -1,0 +1,6 @@
+# Electric Vehicle Charging
+
+This package provides widgets around capturing energy data related to electric vehicle charging stations.
+
+Mtuliple stations can be configured and APIs are available for publishing energy data.
+
