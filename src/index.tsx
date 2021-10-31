@@ -1,15 +1,23 @@
 import * as React from "react";
 import { registerWidget, registerLink, registerUI, IContextProvider, } from './uxp';
-import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter } from "uxp/components";
+import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter, useMessageBus, useUpdateWidgetProps } from "uxp/components";
 import './styles.scss';
 
 interface IWidgetProps {
-    uxpContext?: IContextProvider
+    uxpContext?: IContextProvider;
+    duration: string;
+	instanceId: string;
+
 }
 
 const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props) => {
 
-    let [selected, setSelected] = React.useState<string | null>('3');
+    let [selected, _setSelected] = React.useState<string | null>(props.duration||'3');
+    let updater = useUpdateWidgetProps();
+    function setSelected(x:string) {
+        _setSelected(x);
+        updater(props.instanceId,{duration:x});
+    }
     // let [inputValue, setInputValue] = React.useState<string | null>("sample text");
 
     // let [defCheckState, setDefCheckState] = React.useState<boolean>(false);
@@ -83,32 +91,72 @@ const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props
 function fixed(n:number) {
     if (n==0) return '0';
     if (n > 999) {
-        return n.toFixed(0);
+        return new Intl.NumberFormat().format(n);
     }
     if (n > 99) {
         return n.toFixed(1);
     }
     return n.toFixed(2);
 }
+
 interface IChargeSession {
     station: string;
     charges: number;
     power: number;
     duration:number;
 }
-const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
-    let [selected, setSelected] = React.useState<string | null>('3');
-    let [sessions,setSessions] = React.useState<IChargeSession[]>([]);
 
+function useEffectWithPolling(context: any, channel: string, interval: number, callback: () => Promise<void>, deps: any[]) {
+	let [tick, setTick] = React.useState(0);
+	let [timer, setTimer] = React.useState(null);
+
+	let newDeps = deps.slice();
+	newDeps.push(tick);
+
+	function startTimer() {
+		clearTimeout(timer);
+		setTimer(setTimeout(() => {
+			setTick((x) => x + 1);
+		}, interval));
+	}
+
+	React.useEffect(() => {
+		clearTimeout(timer);
+		console.log('running poll job');
+		callback().then(() => {
+			startTimer();
+		}).catch(e => {
+			console.log('Error in useEffectWithPolling', channel, e);
+			startTimer();
+		})
+		return () => timer && clearTimeout(timer);
+	}, newDeps);
+
+	useMessageBus(context, channel, (p, ch) => {
+		setTick((x) => x + 1);
+		return "";
+	});
+
+}
+
+const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
+    let [selected, _setSelected] = React.useState<string | null>(props.duration||'3');
+    let [sessions,setSessions] = React.useState<IChargeSession[]>([]);
+    let updater = useUpdateWidgetProps();
+    function setSelected(x:string) {
+        _setSelected(x);
+        updater(props.instanceId,{duration:x});
+    }
     let start = new Date();
     let end = new Date();
     start.setHours(start.getHours() - Number(selected));
 
-    React.useEffect(()=>{
-        props.uxpContext.executeAction('ElectricVehicleCharging','StationUsage',{start,end},{json:true}).then(data=>{
-            setSessions(data);
-        });
+    useEffectWithPolling(props.uxpContext,'lxp/ev',30000,async ()=>{
+        let data = await props.uxpContext.executeAction('ElectricVehicleCharging','StationUsage',{start,end},{json:true});
+        setSessions(data);
+       
     },[selected]);
+   
 
     let {power,charges,duration} = sessions.reduce((old,x) => (
         {power:old.power+x.power,charges:old.charges+x.charges,duration:old.duration+x.duration}
