@@ -2,7 +2,7 @@
   "version": "2.0",
   "models": [
     {
-      "Key": "11",
+      "Key": "3",
       "Name": "ElectricVehicleCharging",
       "Definition": {
         "version": "v2",
@@ -10,54 +10,6 @@
         "attributes": [],
         "flows": {
           "blocks": [
-            {
-              "title": "Action",
-              "type": "actionstart",
-              "id": "635ce430-dd34-4117-ffa7-d39dffc00bfe",
-              "position": {
-                "left": 60,
-                "top": 60
-              },
-              "surface": "DeleteAllStations",
-              "connections": {
-                "inputs": [],
-                "outputs": [
-                  {
-                    "source": "635ce430-dd34-4117-ffa7-d39dffc00bfe:output:output",
-                    "target": "77c7e122-333f-465a-e815-bd0a2e2312bd:input:trigger"
-                  }
-                ]
-              },
-              "inputValues": [],
-              "outputValues": [
-                {
-                  "id": "output",
-                  "type": "",
-                  "label": "All Output",
-                  "description": "",
-                  "documentation": "",
-                  "example": "",
-                  "dataType": ""
-                },
-                {
-                  "id": "__error__",
-                  "type": "error",
-                  "label": "Error",
-                  "description": "",
-                  "documentation": "",
-                  "example": "",
-                  "dataType": ""
-                }
-              ],
-              "actionName": "DeleteAllStations",
-              "initiate": false,
-              "published": false,
-              "debug": false,
-              "roles": [],
-              "static": true,
-              "canOverrideCredentials": false,
-              "docs": "Delete all charging station configuration data."
-            },
             {
               "title": "Output",
               "type": "actionoutput",
@@ -85,6 +37,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "",
+                  "transformationOptions": "",
                   "disablelog": ""
                 },
                 {
@@ -95,6 +48,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "",
+                  "transformationOptions": "",
                   "disablelog": ""
                 }
               ],
@@ -152,11 +106,56 @@
               "actionName": "RecordCharge",
               "initiate": false,
               "published": false,
-              "debug": false,
+              "debug": true,
               "roles": [],
               "static": true,
               "canOverrideCredentials": false,
               "docs": "Upload charging sessions from the EV chargers.\n\nEach session contains\n\n* `station` which is a unique station id for the charging station\n* `chargeStartTime` -the time at which charging started, in UTC\n* `duration` - the charging duration in seconds\n* `power` - the amount of power consumed while charging in kWh\n\n# Output\n\n```\n{\"status\":\"ok\"}\n```"
+            },
+            {
+              "title": "Output",
+              "type": "actionoutput",
+              "id": "0c415451-224c-45bb-d481-b49073ab021c",
+              "position": {
+                "left": 796,
+                "top": 102
+              },
+              "surface": "StationUsage",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "b139dd38-72e3-4f21-d096-4e02862b1594:output:stations",
+                    "target": "0c415451-224c-45bb-d481-b49073ab021c:input:input"
+                  }
+                ],
+                "outputs": []
+              },
+              "inputValues": [
+                {
+                  "id": "input",
+                  "type": "",
+                  "label": "Value",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [],
+              "fieldName": ""
             },
             {
               "title": "ES6Javascript",
@@ -194,6 +193,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "",
+                  "transformationOptions": "",
                   "disablelog": ""
                 },
                 {
@@ -204,6 +204,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "",
+                  "transformationOptions": "",
                   "disablelog": ""
                 }
               ],
@@ -230,6 +231,383 @@
               "description": "",
               "code": "let {sessions} = runtime.inputs();\nlet stationMap = {};\nasync function main() {\n    var t = lucy.trends();\n    let points = [];\n    for(var s of sessions) {\n\n        if (!s.station) {\n            continue;\n        }\n        \n        points.push({\n            trend:`/evcharging/duration`,\n            value:Number(s.duration),\n            timestamp:lucy.parseDateTime(s.chargeStartTime),\n            tags:{station:s.station||''}    \n        });\n        // points.push({\n        //     trend:`/evcharging/${s.station}/duration`,\n        //     value:Number(s.duration),\n        //     timestamp:lucy.parseDateTime(s.chargeStartTime),\n        //     tags:{station:s.station||''}    \n        // });\n\n        points.push({\n            trend:`/evcharging/power`,\n            value:Number(s.power),\n            timestamp:lucy.parseDateTime(s.chargeStartTime),\n            tags:{station:s.station||''}                 \n        });\n        stationMap[s.station] = 1;\n    }\n\n    await t.addPoints(points,{});\n\n    let dc = lucy.currentModel().collections();\n    for(let station of Object.keys(stationMap)) {\n        await dc.updateOne('stations',{id:station},{'$set':{id:station}},{});\n    }\n\n}\n\nmain().then(_ => runtime.done({done:1})).catch(e => runtime.error(e));",
               "timeoutMilliseconds": 5000
+            },
+            {
+              "title": "Delete all document",
+              "type": "modelcollections:deleteall",
+              "id": "77c7e122-333f-465a-e815-bd0a2e2312bd",
+              "position": {
+                "left": 425,
+                "top": 57
+              },
+              "surface": "DeleteAllStations",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "635ce430-dd34-4117-ffa7-d39dffc00bfe:output:output",
+                    "target": "77c7e122-333f-465a-e815-bd0a2e2312bd:input:trigger"
+                  }
+                ],
+                "outputs": []
+              },
+              "inputValues": [
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [
+                {
+                  "id": "__error__",
+                  "type": "error",
+                  "label": "Error",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "output",
+                  "type": "",
+                  "label": "All Output",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ],
+              "CollectionName": "86454804-101e-4d6a-a4cd-7a9067d6f508",
+              "configuration": "[]",
+              "UpdateAsAttributes": false,
+              "ReceiveIndividualFields": false,
+              "TakeFilterFromPin": false,
+              "timeout": 5000
+            },
+            {
+              "title": "PublishMessage",
+              "type": "publishmessage",
+              "id": "a625172f-7d7a-48ce-8c63-b999ea61cc43",
+              "position": {
+                "left": 769,
+                "top": 419
+              },
+              "surface": "RecordCharge",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "610b2c05-e65d-4839-e317-7eb11da8ef09:output:done",
+                    "target": "a625172f-7d7a-48ce-8c63-b999ea61cc43:input:trigger"
+                  }
+                ],
+                "outputs": []
+              },
+              "inputValues": [
+                {
+                  "id": "channel",
+                  "type": "",
+                  "label": "Channel",
+                  "value": "lxp/ev",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "message",
+                  "type": "",
+                  "label": "Message",
+                  "value": "1",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [
+                {
+                  "id": "done",
+                  "type": "",
+                  "label": "Done",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ]
+            },
+            {
+              "title": "Action",
+              "type": "actionstart",
+              "id": "635ce430-dd34-4117-ffa7-d39dffc00bfe",
+              "position": {
+                "left": 60,
+                "top": 60
+              },
+              "surface": "DeleteAllStations",
+              "connections": {
+                "inputs": [],
+                "outputs": [
+                  {
+                    "source": "635ce430-dd34-4117-ffa7-d39dffc00bfe:output:output",
+                    "target": "77c7e122-333f-465a-e815-bd0a2e2312bd:input:trigger"
+                  }
+                ]
+              },
+              "inputValues": [],
+              "outputValues": [
+                {
+                  "id": "output",
+                  "type": "",
+                  "label": "All Output",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "__error__",
+                  "type": "error",
+                  "label": "Error",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ],
+              "actionName": "DeleteAllStations",
+              "initiate": false,
+              "published": false,
+              "debug": false,
+              "roles": [],
+              "static": true,
+              "canOverrideCredentials": false,
+              "docs": "Delete all charging station configuration data."
+            },
+            {
+              "title": "Query Points",
+              "type": "timeseriesquerypoints",
+              "id": "fecbc58f-4474-4519-d559-68d6efb26f2c",
+              "position": {
+                "left": 465,
+                "top": 82
+              },
+              "surface": "GetAllPowerData",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "d7da9bf8-8772-4a12-eb6b-1097772f0ab2:output:start",
+                    "target": "fecbc58f-4474-4519-d559-68d6efb26f2c:input:from"
+                  },
+                  {
+                    "source": "d7da9bf8-8772-4a12-eb6b-1097772f0ab2:output:end",
+                    "target": "fecbc58f-4474-4519-d559-68d6efb26f2c:input:to"
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": "fecbc58f-4474-4519-d559-68d6efb26f2c:output:output",
+                    "target": "50d24e32-bab1-4bde-9f0b-87ba22a4f4ea:input:input"
+                  }
+                ]
+              },
+              "inputValues": [
+                {
+                  "id": "trend",
+                  "type": "",
+                  "label": "Trend Name",
+                  "value": "/evcharging/power",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "bucket",
+                  "type": "",
+                  "label": "Bucket Type",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "aggregation",
+                  "type": "",
+                  "label": "Aggregation Type",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "from",
+                  "type": "",
+                  "label": "From",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "datetime",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "to",
+                  "type": "",
+                  "label": "To",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "datetime",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "tags",
+                  "type": "",
+                  "label": "Tag List",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "limit",
+                  "type": "",
+                  "label": "Limit",
+                  "value": "1000000",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "offset",
+                  "type": "",
+                  "label": "Offset",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "descending",
+                  "type": "",
+                  "label": "Descending",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [
+                {
+                  "id": "output",
+                  "type": "",
+                  "label": "All Output",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "__error__",
+                  "type": "error",
+                  "label": "Error",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ],
+              "timeout": 5000
+            },
+            {
+              "title": "Output",
+              "type": "actionoutput2",
+              "id": "50d24e32-bab1-4bde-9f0b-87ba22a4f4ea",
+              "position": {
+                "left": 804,
+                "top": 66
+              },
+              "surface": "GetAllPowerData",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "fecbc58f-4474-4519-d559-68d6efb26f2c:output:output",
+                    "target": "50d24e32-bab1-4bde-9f0b-87ba22a4f4ea:input:input"
+                  }
+                ],
+                "outputs": []
+              },
+              "inputValues": [
+                {
+                  "id": "input",
+                  "type": "",
+                  "label": "Value",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [],
+              "fieldName": ""
             },
             {
               "title": "ES6Javascript",
@@ -267,6 +645,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "",
+                  "transformationOptions": "",
                   "disablelog": ""
                 },
                 {
@@ -277,6 +656,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "datetime",
+                  "transformationOptions": "",
                   "disablelog": ""
                 },
                 {
@@ -287,6 +667,7 @@
                   "description": "",
                   "documentation": "",
                   "transformation": "datetime",
+                  "transformationOptions": "",
                   "disablelog": ""
                 }
               ],
@@ -313,168 +694,6 @@
               "description": "",
               "code": "let dc = lucy.currentModel().collections();\nlet trends = lucy.trends();\nlet { start, end } = runtime.inputs();\n\nasync function main() {\n    let stations = await dc.findMany('stations', {}, {});\n    let stationResults = [];\n    for (let station of stations) {\n        let charge = { power: 0, duration: 0,charges:0,station:station.id };\n        \n        let results = await trends.queryPoints(`/evcharging/duration`, start, end, { station: station.id }, '', '', {limit:1000});\n        charge.duration = results.reduce((old, x) => old + Number(x.Value), 0);\n\n        charge.charges = results.length;\n\n\n        let powerResults = await trends.queryPoints(`/evcharging/power`, start, end, { station: station.id }, '', '', {limit:1000});\n        charge.power = powerResults.reduce((old, x) => old + Number(x.Value), 0);\n        \n        stationResults.push(charge)\n\n    }\n\n    return stationResults;\n}\nmain().then(_ => runtime.done({ stations: _ })).catch(e => runtime.error(e));",
               "timeoutMilliseconds": 5000
-            },
-            {
-              "title": "PublishMessage",
-              "type": "publishmessage",
-              "id": "a625172f-7d7a-48ce-8c63-b999ea61cc43",
-              "position": {
-                "left": 769,
-                "top": 419
-              },
-              "surface": "RecordCharge",
-              "connections": {
-                "inputs": [
-                  {
-                    "source": "610b2c05-e65d-4839-e317-7eb11da8ef09:output:done",
-                    "target": "a625172f-7d7a-48ce-8c63-b999ea61cc43:input:trigger"
-                  }
-                ],
-                "outputs": []
-              },
-              "inputValues": [
-                {
-                  "id": "channel",
-                  "type": "",
-                  "label": "Channel",
-                  "value": "lxp/ev",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                },
-                {
-                  "id": "message",
-                  "type": "",
-                  "label": "Message",
-                  "value": "1",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                },
-                {
-                  "id": "trigger",
-                  "type": "",
-                  "label": "Trigger",
-                  "value": "",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                }
-              ],
-              "outputValues": [
-                {
-                  "id": "done",
-                  "type": "",
-                  "label": "Done",
-                  "description": "",
-                  "documentation": "",
-                  "example": "",
-                  "dataType": ""
-                }
-              ]
-            },
-            {
-              "title": "Output",
-              "type": "actionoutput",
-              "id": "0c415451-224c-45bb-d481-b49073ab021c",
-              "position": {
-                "left": 796,
-                "top": 102
-              },
-              "surface": "StationUsage",
-              "connections": {
-                "inputs": [
-                  {
-                    "source": "b139dd38-72e3-4f21-d096-4e02862b1594:output:stations",
-                    "target": "0c415451-224c-45bb-d481-b49073ab021c:input:input"
-                  }
-                ],
-                "outputs": []
-              },
-              "inputValues": [
-                {
-                  "id": "input",
-                  "type": "",
-                  "label": "Value",
-                  "value": "",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                },
-                {
-                  "id": "trigger",
-                  "type": "",
-                  "label": "Trigger",
-                  "value": "",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                }
-              ],
-              "outputValues": [],
-              "fieldName": ""
-            },
-            {
-              "title": "Delete all document",
-              "type": "modelcollections:deleteall",
-              "id": "77c7e122-333f-465a-e815-bd0a2e2312bd",
-              "position": {
-                "left": 425,
-                "top": 57
-              },
-              "surface": "DeleteAllStations",
-              "connections": {
-                "inputs": [
-                  {
-                    "source": "635ce430-dd34-4117-ffa7-d39dffc00bfe:output:output",
-                    "target": "77c7e122-333f-465a-e815-bd0a2e2312bd:input:trigger"
-                  }
-                ],
-                "outputs": []
-              },
-              "inputValues": [
-                {
-                  "id": "trigger",
-                  "type": "",
-                  "label": "Trigger",
-                  "value": "",
-                  "description": "",
-                  "documentation": "",
-                  "transformation": "",
-                  "disablelog": ""
-                }
-              ],
-              "outputValues": [
-                {
-                  "id": "__error__",
-                  "type": "error",
-                  "label": "Error",
-                  "description": "",
-                  "documentation": "",
-                  "example": "",
-                  "dataType": ""
-                },
-                {
-                  "id": "output",
-                  "type": "",
-                  "label": "All Output",
-                  "description": "",
-                  "documentation": "",
-                  "example": "",
-                  "dataType": ""
-                }
-              ],
-              "CollectionName": "86454804-101e-4d6a-a4cd-7a9067d6f508",
-              "configuration": "[]",
-              "UpdateAsAttributes": false,
-              "ReceiveIndividualFields": false,
-              "TakeFilterFromPin": false,
-              "timeout": 5000
             },
             {
               "title": "Action",
@@ -545,6 +764,169 @@
               "static": true,
               "canOverrideCredentials": false,
               "docs": ""
+            },
+            {
+              "title": "Output",
+              "type": "actionoutput2",
+              "id": "47ccaee7-d0a2-437f-da39-4529e81e9f1a",
+              "position": {
+                "left": 620,
+                "top": 131
+              },
+              "surface": "GetSettings",
+              "connections": {
+                "inputs": [
+                  {
+                    "source": "a63e6606-e23b-40fc-b065-1ee8520b012b:output:output",
+                    "target": "47ccaee7-d0a2-437f-da39-4529e81e9f1a:input:trigger"
+                  }
+                ],
+                "outputs": []
+              },
+              "inputValues": [
+                {
+                  "id": "input",
+                  "type": "",
+                  "label": "Value",
+                  "value": "#{model.cost}",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                },
+                {
+                  "id": "trigger",
+                  "type": "",
+                  "label": "Trigger",
+                  "value": "",
+                  "description": "",
+                  "documentation": "",
+                  "transformation": "",
+                  "transformationOptions": "",
+                  "disablelog": ""
+                }
+              ],
+              "outputValues": [],
+              "fieldName": "price"
+            },
+            {
+              "title": "Action",
+              "type": "actionstart",
+              "id": "a63e6606-e23b-40fc-b065-1ee8520b012b",
+              "position": {
+                "left": 149,
+                "top": 145
+              },
+              "surface": "GetSettings",
+              "connections": {
+                "inputs": [],
+                "outputs": [
+                  {
+                    "source": "a63e6606-e23b-40fc-b065-1ee8520b012b:output:output",
+                    "target": "47ccaee7-d0a2-437f-da39-4529e81e9f1a:input:trigger"
+                  }
+                ]
+              },
+              "inputValues": [],
+              "outputValues": [
+                {
+                  "id": "output",
+                  "type": "",
+                  "label": "All Output",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "__error__",
+                  "type": "error",
+                  "label": "Error",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ],
+              "actionName": "GetSettings",
+              "initiate": false,
+              "published": false,
+              "debug": false,
+              "roles": [],
+              "static": true,
+              "canOverrideCredentials": false,
+              "docs": ""
+            },
+            {
+              "title": "Action",
+              "type": "actionstart",
+              "id": "d7da9bf8-8772-4a12-eb6b-1097772f0ab2",
+              "position": {
+                "left": 90,
+                "top": 166
+              },
+              "surface": "GetAllPowerData",
+              "connections": {
+                "inputs": [],
+                "outputs": [
+                  {
+                    "source": "d7da9bf8-8772-4a12-eb6b-1097772f0ab2:output:start",
+                    "target": "fecbc58f-4474-4519-d559-68d6efb26f2c:input:from"
+                  },
+                  {
+                    "source": "d7da9bf8-8772-4a12-eb6b-1097772f0ab2:output:end",
+                    "target": "fecbc58f-4474-4519-d559-68d6efb26f2c:input:to"
+                  }
+                ]
+              },
+              "inputValues": [],
+              "outputValues": [
+                {
+                  "id": "output",
+                  "type": "",
+                  "label": "All Output",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "__error__",
+                  "type": "error",
+                  "label": "Error",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "start",
+                  "type": "",
+                  "label": "start",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                },
+                {
+                  "id": "end",
+                  "type": "",
+                  "label": "end",
+                  "description": "",
+                  "documentation": "",
+                  "example": "",
+                  "dataType": ""
+                }
+              ],
+              "actionName": "GetAllPowerData",
+              "initiate": false,
+              "published": false,
+              "debug": false,
+              "roles": [],
+              "static": true,
+              "canOverrideCredentials": false,
+              "docs": ""
             }
           ],
           "position": {
@@ -567,6 +949,15 @@
             ]
           },
           {
+            "name": "DeleteAllStations",
+            "published": false,
+            "static": true,
+            "initiate": false,
+            "canOverrideCredentials": false,
+            "outputs": [],
+            "parameters": []
+          },
+          {
             "name": "StationUsage",
             "published": false,
             "static": true,
@@ -581,13 +972,25 @@
             ]
           },
           {
-            "name": "DeleteAllStations",
+            "name": "GetSettings",
             "published": false,
             "static": true,
             "initiate": false,
             "canOverrideCredentials": false,
             "outputs": [],
             "parameters": []
+          },
+          {
+            "name": "GetAllPowerData",
+            "published": false,
+            "static": true,
+            "initiate": false,
+            "canOverrideCredentials": false,
+            "outputs": [],
+            "parameters": [
+              "start",
+              "end"
+            ]
           }
         ],
         "actions": [
@@ -605,6 +1008,15 @@
             ]
           },
           {
+            "name": "DeleteAllStations",
+            "published": false,
+            "static": true,
+            "initiate": false,
+            "canOverrideCredentials": false,
+            "outputs": [],
+            "parameters": []
+          },
+          {
             "name": "StationUsage",
             "published": false,
             "static": true,
@@ -619,24 +1031,36 @@
             ]
           },
           {
-            "name": "DeleteAllStations",
+            "name": "GetSettings",
             "published": false,
             "static": true,
             "initiate": false,
             "canOverrideCredentials": false,
             "outputs": [],
             "parameters": []
+          },
+          {
+            "name": "GetAllPowerData",
+            "published": false,
+            "static": true,
+            "initiate": false,
+            "canOverrideCredentials": false,
+            "outputs": [],
+            "parameters": [
+              "start",
+              "end"
+            ]
           }
         ],
         "uioptions": {}
       },
       "UIDefinition": null,
-      "MetadataDictionary": "null",
+      "MetadataDictionary": "{\"parameters\":[{\"id\":\"cost\",\"label\":\"Price per WH\",\"type\":\"\",\"subtype\":\"\"}],\"tags\":[],\"capabilities\":[],\"onSave\":\"\"}",
       "Icon": "",
       "ApiRoutes": [
         {
-          "Key": "1033",
-          "MapKey": "11",
+          "Key": "470",
+          "MapKey": "3",
           "Route": "charging",
           "Method": "POST",
           "BodyFormat": "JSON",
@@ -646,8 +1070,8 @@
           "NoAuth": "0"
         },
         {
-          "Key": "1034",
-          "MapKey": "11",
+          "Key": "471",
+          "MapKey": "3",
           "Route": "usage",
           "Method": "GET",
           "BodyFormat": "JSON",
@@ -657,8 +1081,8 @@
           "NoAuth": "0"
         },
         {
-          "Key": "1035",
-          "MapKey": "11",
+          "Key": "472",
+          "MapKey": "3",
           "Route": "station",
           "Method": "DELETE",
           "BodyFormat": "JSON",
@@ -671,8 +1095,8 @@
       "JSModules": [],
       "ModelCollections": [
         {
-          "Key": "343",
-          "MapKey": "11",
+          "Key": "164",
+          "MapKey": "3",
           "GUID": "86454804-101e-4d6a-a4cd-7a9067d6f508",
           "Attributes": "[{\"name\":\"id\"},{\"name\":\"label\"}]",
           "Name": "stations"

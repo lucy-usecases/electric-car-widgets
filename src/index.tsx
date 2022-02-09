@@ -1,12 +1,17 @@
 import * as React from "react";
 import { registerWidget, registerLink, registerUI, IContextProvider, } from './uxp';
-import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter, useMessageBus, useUpdateWidgetProps } from "uxp/components";
+import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter, useMessageBus, useUpdateWidgetProps, useToast, Button } from "uxp/components";
 import './styles.scss';
 
 interface IWidgetProps {
     uxpContext?: IContextProvider;
     duration: string;
 	instanceId: string;
+    totalenergy:boolean;
+    averagepercharge:boolean;
+    emissions:boolean;
+    stations:boolean;
+    averagecostpercharge:boolean;
 
 }
 
@@ -91,10 +96,10 @@ const Electric_car_widgetsWidget: React.FunctionComponent<IWidgetProps> = (props
 function fixed(n:number) {
     if (n==0) return '0';
     if (n > 999) {
-        return new Intl.NumberFormat().format(n);
+        return new Intl.NumberFormat().format(Number(n.toFixed(2)));
     }
     if (n > 99) {
-        return n.toFixed(1);
+        return n.toFixed(2);
     }
     return n.toFixed(2);
 }
@@ -142,6 +147,7 @@ function useEffectWithPolling(context: any, channel: string, interval: number, c
 const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
     let [selected, _setSelected] = React.useState<string | null>(props.duration||'3');
     let [sessions,setSessions] = React.useState<IChargeSession[]>([]);
+    let [cost,setCost] = React.useState(0);
     let updater = useUpdateWidgetProps();
     function setSelected(x:string) {
         _setSelected(x);
@@ -156,6 +162,13 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         setSessions(data);
        
     },[selected]);
+
+    React.useEffect(()=>{
+        props.uxpContext.executeAction('ElectricVehicleCharging','GetSettings',{},{json:true}).then((data:any)=>{
+            let cost = Number(data.price || 0);
+            setCost(cost);
+        });
+    },[]);
    
 
     let {power,charges,duration} = sessions.reduce((old,x) => (
@@ -163,7 +176,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
     ),{power:0,charges:0,duration:0});
     let energyPerCharge = charges==0?0:(power/charges);
     let totalEnergy = power;
-    let chargingStationsUsed = sessions.filter(x => x.duration>0).length;
+    let chargingStationsUsed = sessions.filter(x => x.power>0).length;
     let totalChargingStations = sessions.length;
    
     let totalDuration = (Number(end) - Number(start))/1000;
@@ -176,29 +189,43 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         emissionReduction = emissionReduction/1000.0;
         units = 'kg';
     }
-    const GridData = [
-        {
+    const GridData = [];
+    if (props.totalenergy) {
+        GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
-            title: <h3 className="orange">{`${fixed(totalEnergy)} Kw`}</h3>,
+            title: <h3 className="orange">{`${fixed(totalEnergy)} WH`}</h3>,
             subTitle: "Total Energy"
-        },
-        {
+        });
+    }
+    if (props.averagepercharge) {
+        GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
-            // name: "Udhaya Kumar",
-            title: <h3 className="green">{`${fixed(energyPerCharge)} KwH`}</h3>,
+            title: <h3 className="green">{`${fixed(energyPerCharge)} WH`}</h3>,
             subTitle: " Average energy per charge"
-        },
-        {
+        });
+    }
+    if (props.emissions) {
+        GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
             title: <h3 className="green">{`${fixed(emissionReduction)}${units}`}</h3>,
             subTitle: "REDUCED EMISSIONS"
-        },
-        {
+        });
+    }
+    if (props.stations) {
+        GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
             title: <h3 className="orange">{chargingStationsUsed} <span className="white">{`/${totalChargingStations}`}</span></h3>,
             subTitle: "CHARGING STATIONS USED"
-        }  
-    ]  
+        });
+    } 
+    if (props.averagecostpercharge) {
+        GridData.push({
+            icon: "https://static.iviva.com/images/Car_widget/plug.svg",
+            title: <h3 className="orange">{'$'  + fixed(energyPerCharge*cost)}</h3>,
+            subTitle: "AVERAGE COST PER CHARGE"
+        });
+    } 
+    
 
     const renderGridItem = (item: any, key: number) => {
         return (<ItemCard
@@ -249,7 +276,90 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         </WidgetWrapper>
     )
 };
+export interface IConfigPanelProps {
+    configs:{ [key: string]: any },
+    onSubmit: (data: { [key: string]: any }) => void
+    onCancel?: () => void
+}
+const EVConfigPanel: React.FunctionComponent<IConfigPanelProps> = (props) => {
 
+	let { onSubmit, onCancel, configs } = props
+	let toast = useToast();
+    let [totalEnergy,setTotalEnergy] = React.useState(true);
+    let [averageEnergy,setAverageEnergy] = React.useState(true);
+    let [emissions,setEmissions] = React.useState(true);
+    let [stations,setStations] = React.useState(true);
+    let [averageCost,setAverageCost] = React.useState(false);
+
+	// React.useEffect(() => {
+
+	// 	if (configs) {
+    //         setTotalEnergy(configs.totalenergy||true);
+    //         setAverageEnergy(configs.averagepercharge||true);
+    //         setEmissions(configs.emissions||true);
+    //         setAverageCost(configs.averagecostpercharge||false);
+    //         setStations(configs.stations||true);
+
+			
+	// 	}
+	// }, [configs])
+
+	// validate 
+	function isValid() {
+		let isValid = true
+		
+		return isValid
+	}
+
+	function save() {
+		let valid = isValid()
+		if (valid) {
+			onSubmit({
+                emissions,
+                averagecostpercharge:averageCost,
+                stations,
+                totalenergy:totalEnergy,
+                averagepercharge:averageEnergy,
+			})
+		}
+		else {
+			toast.error("Please complete the form. All fields are required")
+		}
+	}
+
+	function cancel() {
+		onCancel()
+	}
+
+	return <div className="energy-budget-widget-config-panel">
+		<h4>Enabled Sections (Pick 4)</h4>
+		<div className="row">
+			<FormField>
+                <Checkbox label='Total Energy'  checked={totalEnergy} onChange={setTotalEnergy}  />
+			</FormField>
+			<FormField>
+                <Checkbox label='Emissions Reduced'  checked={emissions} onChange={setEmissions}  />
+			</FormField>
+			<FormField>
+                <Checkbox label='Average Energy Per Charge'  checked={averageEnergy} onChange={setAverageEnergy}  />
+			</FormField>
+		
+			<FormField>
+                <Checkbox label='Stations'  checked={stations} onChange={setStations}  />
+			</FormField>
+            <FormField>
+                <Checkbox label='Average Cost Per Charge'  checked={averageCost} onChange={setAverageCost}  />
+			</FormField>
+		
+		</div>
+
+
+		<FormField className="button-row">
+			<Button className="cancel" title="Cancel" onClick={cancel} />
+			<Button className="save" title="Save" onClick={save} active={isValid()} />
+		</FormField>
+	</div>
+}
 /**
  * Register as a Widget
  */
@@ -272,6 +382,34 @@ registerWidget({
     configs: {
         layout: {
        
-        }
+        },
+        props: [
+			{
+				name: "totalenergy",
+				label: "Total Energy",
+				type: "string"
+			},
+			{
+				name: "averagepercharge",
+				label: "Average Energy Per Charge",
+				type: "string"
+			},
+            {
+				name: "emissions",
+				label: "Reduced Emissions",
+				type: "string"
+			},
+            {
+				name: "stations",
+				label: "Charging Stations Used",
+				type: "string"
+			},
+            {
+				name: "averagecostpercharge",
+				label: "Average Cost Per Charge",
+				type: "string"
+			},
+		],
+        configPanel: EVConfigPanel
     }
 });
