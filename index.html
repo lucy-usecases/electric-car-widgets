@@ -44,9 +44,10 @@
         let deletedWidgets = [];
 
         let contextProviderValue = {
+            environment: "dev",
             userKey: "user_001",
             root: "root",
-            sidebarItems: () => (window.SidebarLinks || []).map(s => s.id),
+            sidebarItems: window.SidebarLinks || [],
             scriptFiles: scripts, // widget script files
             apiKey: '',
             widgetManager: {
