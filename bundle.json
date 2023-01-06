@@ -5,7 +5,8 @@
         {
             "id":"ev-car-widget-details",
             "title":"EV Charging Summary",
-            "description":"Summary Statistics about Electric Vehicle Chargers"
+            "description":"Summary Statistics about Electric Vehicle Chargers",
+	    "category":"transport"
         }
     ]
 }
