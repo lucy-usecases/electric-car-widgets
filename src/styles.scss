@@ -8,6 +8,17 @@
     background-color: #000000;
     color: #ffffffFF;
 
+    .uxp-widget-title-bar{
+        display: flex;
+        align-items: start;
+        .txt{
+            padding-top: 8px;
+        }
+        
+        .car_widget_rht{
+            width: 100%;
+        }
+    }
 
 
     .car_widget-battery-bg{ 

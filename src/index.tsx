@@ -1,6 +1,6 @@
 import * as React from "react";
 import { registerWidget, registerLink, registerUI, IContextProvider, } from './uxp';
-import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter, useMessageBus, useUpdateWidgetProps, useToast, Button } from "uxp/components";
+import { DataList, WidgetWrapper, TitleBar, ItemListCard, FilterPanel, DataGrid, ItemCard, FormField, Label, Select, Input, DateRangePicker, DatePicker, Checkbox, ProfileImage, Popover, TrendChartComponent, ToggleFilter, useMessageBus, useUpdateWidgetProps, useToast, Button, SampleDataLabel } from "uxp/components";
 import './styles.scss';
 
 interface IWidgetProps {
@@ -189,29 +189,40 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         emissionReduction = emissionReduction / 1000.0;
         units = 'kg';
     }
+
+    let isSample = !totalEnergy && !energyPerCharge && !emissionReduction && !chargingStationsUsed && !totalChargingStations;
+    if(isSample) {
+        totalEnergy = 25;
+        energyPerCharge = 3;
+        emissionReduction = 13;
+        chargingStationsUsed = 2;
+        totalChargingStations = 5;
+    }
+
+    let dataExistsorNot = isSample || !isSample;
     const GridData = [];
-    if (props.totalenergy) {
+    if (props.totalenergy || dataExistsorNot) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
             title: <h3 className="orange">{`${fixed(totalEnergy)} WH`}</h3>,
             subTitle: "Total Energy"
         });
     }
-    if (props.averagepercharge) {
+    if (props.averagepercharge || dataExistsorNot) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
             title: <h3 className="green">{`${fixed(energyPerCharge)} WH`}</h3>,
             subTitle: " Average energy per charge"
         });
     }
-    if (props.emissions) {
+    if (props.emissions || dataExistsorNot) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
             title: <h3 className="green">{`${fixed(emissionReduction)}${units}`}</h3>,
             subTitle: "REDUCED EMISSIONS"
         });
     }
-    if (props.stations) {
+    if (props.stations || dataExistsorNot) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
             title: <h3 className="orange">{chargingStationsUsed} <span className="white">{`/${totalChargingStations}`}</span></h3>,
@@ -239,8 +250,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
 
     return (
         <WidgetWrapper className="car_widget car_widget-details">
-            <TitleBar title="">   </TitleBar>
-
+            <TitleBar title="EV Charging Summary">   
             <div className="car_widget_rht">
                 <div className="uti-sel-boxes">
                     <div className="uti-sel-box">
@@ -263,7 +273,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
                     </div>
                 </div>
             </div>
-
+            </TitleBar>
             <div className="car_details" >
                 <DataGrid
                     data={GridData}
@@ -271,7 +281,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
                     columns={2}
                 />
             </div>
-
+            <SampleDataLabel show={isSample} />
 
         </WidgetWrapper>
     )
