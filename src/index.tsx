@@ -198,31 +198,30 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         chargingStationsUsed = 2;
         totalChargingStations = 5;
     }
-
-    let dataExistsorNot = isSample || !isSample;
+    
     const GridData = [];
-    if (props.totalenergy || dataExistsorNot) {
+    if (props.totalenergy || totalEnergy) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
             title: <h3 className="orange">{`${fixed(totalEnergy)} WH`}</h3>,
             subTitle: "Total Energy"
         });
     }
-    if (props.averagepercharge || dataExistsorNot) {
+    if (props.averagepercharge || energyPerCharge) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/metro-power.svg",
             title: <h3 className="green">{`${fixed(energyPerCharge)} WH`}</h3>,
             subTitle: " Average energy per charge"
         });
     }
-    if (props.emissions || dataExistsorNot) {
+    if (props.emissions || emissionReduction) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
             title: <h3 className="green">{`${fixed(emissionReduction)}${units}`}</h3>,
             subTitle: "REDUCED EMISSIONS"
         });
     }
-    if (props.stations || dataExistsorNot) {
+    if (props.stations || (chargingStationsUsed || totalChargingStations)) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
             title: <h3 className="orange">{chargingStationsUsed} <span className="white">{`/${totalChargingStations}`}</span></h3>,
