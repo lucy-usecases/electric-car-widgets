@@ -10682,7 +10682,7 @@ module.exports = UXPComponents;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"id":"75b9de54-7319-43e8-b007-0fd0c221e81d","author":"eutech","widgets":[{"id":"ev-car-widget-details","title":"EV Charging Summary","description":"Summary Statistics about Electric Vehicle Chargers","category":"transport"}]}');
+module.exports = JSON.parse('{"id":"75b9de54-7319-43e8-b007-0fd0c221e81d","author":"eutech","widgets":[{"id":"ev-car-widget-details","name":"EV Charging Summary","description":"Summary Statistics about Electric Vehicle Chargers","category":"transport"}]}');
 
 /***/ })
 
