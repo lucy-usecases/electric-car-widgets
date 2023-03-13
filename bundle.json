@@ -6,7 +6,7 @@
             "id":"ev-car-widget-details",
             "name":"EV Charging Summary",
             "description":"Summary Statistics about Electric Vehicle Chargers",
-	    "category":"transport"
+	    "category":"electrical-vehicle-monitoring"
         }
     ]
 }
