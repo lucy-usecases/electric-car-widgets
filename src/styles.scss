@@ -1,27 +1,25 @@
-.car_widget{   
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    min-height: 60px;
-    flex-grow: 0;
+.car_widget {
     background-color: #000000;
     color: #ffffffFF;
+    position: relative;
+    padding: 15px;
+    padding-top: 70px;
 
-    .uxp-widget-title-bar{
-        display: flex;
-        align-items: start;
-        .txt{
-            padding-top: 8px;
-        }
-        
-        .car_widget_rht{
+    .uxp-widget-title-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #000;
+        color: white;
+
+        .car_widget_rht {
             width: 100%;
         }
     }
 
 
-    .car_widget-battery-bg{ 
+    .car_widget-battery-bg {
         background-position: center center;
         background-repeat: no-repeat;
         background-size: contain;
@@ -36,14 +34,7 @@
         transform: translateX(-50%);
     }
 
-    .uxp-widget-title-bar { 
-        padding: 2px;
-        min-height: 20px;
-        background-color: #000000;
-        width: 100%;
-    }
-
-    .car_widget-header{
+    .car_widget-header {
         // display: inline-flex;
         //  width: 100%;
         //  padding: 0px 10px;
@@ -60,16 +51,18 @@
 
     .uxp-form-group.showcase-input {
         width: 100% !important;
-        padding: 0; 
-                .uxp-form-select{ 
-                    position: relative;
-                    .uxp-select-placeholder{  
-                        background-color: #70707061; 
-                        color: #ffffff69; 
-                        padding: 10px 35px 10px 20px;
-                    }
-                } 
-    } 
+        padding: 0;
+
+        .uxp-form-select {
+            position: relative;
+
+            .uxp-select-placeholder {
+                background-color: #70707061;
+                color: #ffffff69;
+                padding: 10px 35px 10px 20px;
+            }
+        }
+    }
 
     label {
         color: #ffffff78;
@@ -84,29 +77,35 @@
         }
     }
 
-    .car_widget_rht { 
+    .car_widget_rht {
         //display: inline-block;
         width: 50%;
         float: right;
 
         .uxp-form-select {
             min-width: 100%;
+
+            .uxp-select-placeholder {
+                .selected {
+                    white-space: nowrap;
+                }
+            }
         }
 
-        .block_building{
+        .block_building {
             float: right;
             margin-top: 0.7em;
             font-size: 0.8em;
         }
 
-        .uti-sel-boxes{
+        .uti-sel-boxes {
             float: right;
-            margin-bottom: 1em;
+            // margin-bottom: 1em;
         }
     }
 
 
-    .car_widget-body{
+    .car_widget-body {
         // display: inline-block;
         // width:100%; 
         // align-items: center;
@@ -121,24 +120,25 @@
         left: 1em;
         transform: translateY(-50%);
 
-        .car-battery{
+        .car-battery {
             display: inline-block;
             width: 90%;
             padding-left: 5%;
-            
-            .widget-pict{
-                display: inline-block; 
+
+            .widget-pict {
+                display: inline-block;
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-size: contain; 
+                background-size: contain;
                 position: relative;
+
                 // opacity: 0.9;
-                &.car{
+                &.car {
                     width: 5em;
                     height: 4em;
                     background-image: url("https://static.iviva.com/images/Car_widget/Car.svg");
 
-                    .car-battery-pict{
+                    .car-battery-pict {
                         display: inline-block;
                         background-position: top left;
                         background-repeat: no-repeat;
@@ -151,15 +151,17 @@
                         top: -2em;
                     }
                 }
-            } 
-            h3.battery-value{
+            }
+
+            h3.battery-value {
                 display: inline-block;
                 font-size: 1.8em;
                 margin: 0.8em 0 0 0;
                 padding: 0;
                 width: 100%;
             }
-            p.battery-status{
+
+            p.battery-status {
                 display: inline-block;
                 font-size: 1.1em;
                 padding: 0;
@@ -169,13 +171,13 @@
         }
     }
 
-    &.car_widget-details{ 
+    &.car_widget-details {
         display: inline-block;
 
-        .car_details{
+        .car_details {
             display: inline-block;
             width: 100%;
-            height: 80%;
+            height: 100%;
 
             // display: inline-block;
             // width: 90%;
@@ -184,54 +186,58 @@
             // top: 50%;
             // transform: translateY(-50%);
 
-            .data-grid { 
+            .data-grid {
                 background-color: transparent;
 
-                .data-grid-column { 
+                .data-grid-column {
                     border: 1px solid #77777763;
                     height: 50%;
                 }
 
-                .item-card{
-                    background-color: transparent; 
+                .item-card {
+                    background-color: transparent;
                     display: inline-block;
-                   
-                   .item-card-image-container {
+
+                    .item-card-image-container {
                         position: inherit;
                         transform: none;
                         left: 0;
                         top: 0;
 
-                        .profile-image-container{
-                            background-color: transparent!important;
+                        .profile-image-container {
+                            background-color: transparent !important;
                             width: 25px;
                             height: 25px;
                             // opacity: 0.8; 
                         }
                     }
-                    .content{
+
+                    .content {
                         margin-left: 0;
 
                         .title {
-                                
 
-                                h3{
-                                    margin: 0;
-                                    padding: 0;
-                                    font-weight: 500;
-                                    font-size: 1.65em;
 
-                                    &.green{
-                                        color: #4fc8acFF;
-                                    }
-                                    &.orange{
-                                        color: #815821FF;  
-                                    }
-                                    span.white{
-                                        color:#ffffffFF;
-                                    }
+                            h3 {
+                                margin: 0;
+                                padding: 0;
+                                font-weight: 500;
+                                font-size: 1.65em;
+
+                                &.green {
+                                    color: #4fc8acFF;
                                 }
-                        } 
+
+                                &.orange {
+                                    color: #815821FF;
+                                }
+
+                                span.white {
+                                    color: #ffffffFF;
+                                }
+                            }
+                        }
+
                         .sub-title {
                             font-size: 9px;
                             padding: 3px 0;
@@ -243,4 +249,13 @@
         }
     }
 
+    &.w-small {
+        .data-grid-column {
+            height: auto!important;
+
+            .item-card {
+                padding: 10px!important;
+            }
+        }
+    }
 }

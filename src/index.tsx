@@ -248,7 +248,19 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
     }
 
     return (
-        <WidgetWrapper className="car_widget car_widget-details">
+        <WidgetWrapper className="car_widget car_widget-details"
+            instanceId={props.instanceId}
+            cssBreakPoints={{
+                width: {
+                    default: 'large',
+                    320: 'small'
+                }
+            }}
+            sampleData={{
+                showLabel: isSample,
+                description: 'This widget is showing sample data'
+            }}
+        >
             <TitleBar title="EV Charging Summary">   
             <div className="car_widget_rht">
                 <div className="uti-sel-boxes">
@@ -267,6 +279,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
                                 ]}
                                 onChange={(value) => { setSelected(value) }}
                                 placeholder=" -- select --"
+                                showEndOfContent={false}
                             />
                         </FormField>
                     </div>
@@ -280,7 +293,6 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
                     columns={2}
                 />
             </div>
-            <SampleDataLabel show={isSample} />
 
         </WidgetWrapper>
     )
@@ -300,18 +312,16 @@ const EVConfigPanel: React.FunctionComponent<IConfigPanelProps> = (props) => {
     let [stations, setStations] = React.useState(true);
     let [averageCost, setAverageCost] = React.useState(false);
 
-    // React.useEffect(() => {
+    React.useEffect(() => {
 
-    // 	if (configs) {
-    //         setTotalEnergy(configs.totalenergy||true);
-    //         setAverageEnergy(configs.averagepercharge||true);
-    //         setEmissions(configs.emissions||true);
-    //         setAverageCost(configs.averagecostpercharge||false);
-    //         setStations(configs.stations||true);
-
-
-    // 	}
-    // }, [configs])
+    	if (configs) {
+            setTotalEnergy(configs.totalenergy||true);
+            setAverageEnergy(configs.averagepercharge||true);
+            setEmissions(configs.emissions||true);
+            setAverageCost(configs.averagecostpercharge||false);
+            setStations(configs.stations||true);
+    	}
+    }, [configs])
 
     // validate 
     function isValid() {
@@ -386,12 +396,15 @@ const EVConfigPanel: React.FunctionComponent<IConfigPanelProps> = (props) => {
 
 registerWidget({
     id: "ev-car-widget-details",
-    name: "EV Charging Summary",
     widget: EVDetails,
     configs: {
         layout: {
-            w: 10,
-            h: 11
+            w: 7,
+            h: 8,
+            maxW: 10,
+            maxH: 11,
+            minW: 7,
+            minH: 8
         },
         props: [
             {
