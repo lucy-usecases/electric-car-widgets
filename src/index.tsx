@@ -204,7 +204,7 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/Car.svg",
             title: <h3 className="orange">{`${fixed(totalEnergy)} WH`}</h3>,
-            subTitle: "Total Energy"
+            subTitle: "Total energy"
         });
     }
     if (props.averagepercharge || energyPerCharge) {
@@ -218,21 +218,21 @@ const EVDetails: React.FunctionComponent<IWidgetProps> = (props) => {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/weather-smoke.svg",
             title: <h3 className="green">{`${fixed(emissionReduction)}${units}`}</h3>,
-            subTitle: "REDUCED EMISSIONS"
+            subTitle: "Reduced emissions"
         });
     }
     if (props.stations || (chargingStationsUsed || totalChargingStations)) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
             title: <h3 className="orange">{chargingStationsUsed} <span className="white">{`/${totalChargingStations}`}</span></h3>,
-            subTitle: "CHARGING STATIONS USED"
+            subTitle: "Charging stations used"
         });
     }
     if (props.averagecostpercharge) {
         GridData.push({
             icon: "https://static.iviva.com/images/Car_widget/plug.svg",
             title: <h3 className="orange">{'$' + fixed(energyPerCharge * cost)}</h3>,
-            subTitle: "AVERAGE COST PER CHARGE"
+            subTitle: "Average cost per charge"
         });
     }
 
